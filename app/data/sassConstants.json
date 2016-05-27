@@ -1,0 +1,23 @@
+{
+    "grid-gutter": "64px",
+    "animation-delay-factor": "2",
+
+    "c-detail-main-picture-build-duration": "500ms",
+    "c-detail-main-accessory-build-duration": "250ms",
+    "c-detail-info-item-build-duration": "250ms",
+
+    "cDetailMainBuildOut": "$c-detail-main-accessory-build-duration / $animation-delay-factor + $c-detail-main-picture-build-duration",
+    "cDetailInfoBuildOut": "$c-detail-info-item-build-duration * ((1 / $animation-delay-factor) * 2 + 1)",
+    "cDetailMainLeave": 625,
+    "cDetailInfoLeave": 500,
+
+    "cDetailMainBuildInInitial": "$c-detail-main-picture-build-duration / $animation-delay-factor + $c-detail-main-accessory-build-duration",
+    "cDetailInfoBuildInInitial": "$c-detail-info-item-build-duration * ((1 / $animation-delay-factor) * 2 + 1)",
+    "cDetailMainAppear": 500,
+    "cDetailInfoAppear": 500,
+
+    "cDetailMainBuildInSubsequent": "$cDetailInfoBuildOut + $cDetailMainBuildInInitial",
+    "cDetailInfoBuildInSubsequent": "($cDetailMainBuildOut / $animation-delay-factor) + $cDetailInfoBuildInInitial",
+    "cDetailMainEnter": 1000,
+    "cDetailInfoEnter": 813
+}

@@ -1,0 +1,213 @@
+.media-and-accessory-container {
+    //@include c-full-screen-overlay();
+    //height: 100%;
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    left: 0;
+
+    .content-container {
+        position: relative;
+        max-width: 90%;
+    }
+
+    z-index: 1;
+
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+
+    @include hit-detection-with-children-only;
+
+    // Setting .c-detail-background z-index to -1 puts it behind parent container
+    // in Firefox but not in Chrome / Safari, hence doing this instead
+    //z-index: 200;
+
+    .media { // picture
+        //position: relative;
+
+        img {
+            @include img-fluid();
+            max-height: 85vh; // for portrait photos
+            box-shadow: 0 3px 5px -1px rgba(0, 0, 0, .2),
+                0 5px 8px 0 rgba(0, 0, 0, .14),
+                0 1px 14px 0 rgba(0, 0, 0, .12);
+        }
+        //z-index: 1; // put picture above title
+    }
+
+    .title {
+        font-size: 1.2rem;
+        line-height: 3rem;
+        width: 100%;
+        cursor: help;
+        z-index: -1; // put title below picture so it can animate in from underneath picture
+        position: absolute;
+    }
+
+
+    .pagination-link {
+        $pagination-link-width: 5vw;
+
+        position: absolute;
+        top: 0;
+        width: $pagination-link-width;
+        height: 100%;
+        fill: white;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        z-index: -1; // put title below picture so it can animate in from underneath picture
+
+        &:active {
+            background-color: $button-active-background;
+        }
+
+        .pagination-link-symbol {
+            width: 2rem;
+            height: 2rem;
+
+            @include media-breakpoint-up(md) {
+                width: 3rem;
+                height: 3rem;
+            }
+        }
+
+        &.previous {
+            left: -$pagination-link-width;
+        }
+
+        &.next {
+            right: -$pagination-link-width;
+        }
+    }
+
+}
+
+// =================================================================================================
+// Animation Definition
+// =================================================================================================
+
+// Initial build-in
+// Total duration = 500 + 250 / $animation-delay-factor = 625
+.detail-main-appear {
+    .c-media-wrapper {
+        @include expand-in-start($c-detail-main-picture-build-duration, null);
+    }
+    .title {
+        @include slide-in-start(
+            "down",
+            $c-detail-main-accessory-build-duration,
+            $c-detail-main-picture-build-duration / $animation-delay-factor
+        );
+    }
+    .previous {
+        @include slide-in-start(
+            "left",
+            $c-detail-main-accessory-build-duration,
+            $c-detail-main-picture-build-duration / $animation-delay-factor
+        );
+    }
+    .next {
+        @include slide-in-start(
+            "right",
+            $c-detail-main-accessory-build-duration,
+            $c-detail-main-picture-build-duration / $animation-delay-factor
+        );
+    }
+}
+.detail-main-appear.detail-main-appear-active,
+.detail-main-enter.detail-main-enter-active {
+    .c-media-wrapper {
+        @include shrink-expand-in-end();
+    }
+    .title {
+        @include slide-in-end(1);
+    }
+    .previous,
+    .next {
+        @include slide-in-end($will-stand-out-on-hover-opacity);
+    }
+}
+
+// Subsequent build-in from CDetailMain (going to another photo)
+// Total duration = 500 / 1.5 + 500 / $animation-delay-factor + 250 ≈ 834
+// or from CDetailInfo (dismissing info)
+// Total duration = ???
+.detail-main-enter {
+    // Don't wait for CDetailInfo to fully build out to start CDetailMain build in,
+    // which provides a sense of continuity and speediness.
+    $initialDelay: $cDetailInfoBuildOut / $animation-delay-factor;
+    .c-media-wrapper {
+        @include shrink-in-start($c-detail-main-picture-build-duration, $initialDelay);
+    }
+    .title {
+        @include slide-in-start(
+            "down",
+            $c-detail-main-accessory-build-duration,
+            $initialDelay + $c-detail-main-picture-build-duration / $animation-delay-factor
+        );
+    }
+    .previous {
+        @include slide-in-start(
+            "left",
+            $c-detail-main-accessory-build-duration,
+            $initialDelay + $c-detail-main-picture-build-duration / $animation-delay-factor
+        );
+    }
+    .next {
+        @include slide-in-start(
+            "right",
+            $c-detail-main-accessory-build-duration,
+            $initialDelay + $c-detail-main-picture-build-duration / $animation-delay-factor
+        );
+    }
+}
+// See above for .detail-main-enter.detail-main-enter-active, which is same as appear-active
+
+//@if $cDetailMainBuildOut != $cDetailInfoBuildOut {
+//    @error "[Cartier] - CDetailMain and CDetailInfo total build-out durations must be the same.";
+//    // because CDetailMain build-in have to wait for either a previous CDetailMain or
+//    // a previous CDetailInfo to build-out in order to perform its build-in.
+//}
+
+// Going to another CDetailMain (going to another photo)
+// Total duration = 250 + 500 / $animation-delay-factor = 500
+// Dismissing CDetailInfo
+// Total duration = 250 * (0.5 + 0.5 + 1) = 500
+.detail-main-leave {
+    @include c-detail-main-build-out();
+
+    // Build-out of CDetailInfo when going to CDetailMain
+    &#media-inspector-info .title {
+        @include expand-out-start($c-detail-info-item-build-duration, null);
+    }
+    .c-map {
+        @include expand-out-start(
+            $c-detail-info-item-build-duration,
+            $c-detail-info-item-build-duration / $animation-delay-factor
+        );
+    }
+    .c-metadata {
+        @include expand-out-start(
+            $c-detail-info-item-build-duration,
+            $c-detail-info-item-build-duration / $animation-delay-factor * 2
+        );
+    }
+}
+.detail-main-leave.detail-main-leave-active {
+    @include c-detail-main-build-out-active();
+
+    // Build-out of CDetailInfo to go to CDetailMain
+    &#media-inspector-info .title {
+        @include expand-out-end();
+    }
+    .c-map {
+        @include expand-out-end();
+    }
+    .c-metadata {
+        @include expand-out-end();
+    }
+}
+

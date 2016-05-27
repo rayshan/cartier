@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <!--html-webpack-plugin adds title here-->
+    <title><%= htmlWebpackPlugin.options.title %></title>
+
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="generator" content="Cartier">
+    <meta name="author" content="<%= htmlWebpackPlugin.options.author %>">
+
+    <% if (htmlWebpackPlugin.options.baseHref) { %>
+    <base href="<%= htmlWebpackPlugin.options.baseHref %>" />
+    <% } %>
+
+    <!-- html-webpack-plugin adds stylesheet & favicon tags here due to conditional hash in filename -->
+</head>
+<body>
+    <div id="app-root"></div>
+
+    <%= htmlWebpackPlugin.options.googleAnalyticsScript %>
+
+    <!-- html-webpack-plugin adds script tag for bundle here due to conditional hash in filename -->
+</body>
+</html>

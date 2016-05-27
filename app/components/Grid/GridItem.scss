@@ -1,0 +1,153 @@
+.c-grid-item { // <a>
+    $side-padding: 1rem * $golden-ratio;
+
+    @include media-breakpoint-up(sm) {
+        width: auto;
+    }
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    will-change: opacity; // Other grid items will dim when this one is hovered
+    transition: opacity $media-animation-duration;
+    position: relative;
+
+    // Default width is 100vw, hence not needing left / right margin
+    margin-bottom: $grid-gutter;
+    @include media-breakpoint-up(sm) {
+        margin: 0 $grid-gutter / 2 $grid-gutter $grid-gutter / 2;
+    }
+
+    .c-media-placeholder-wrapper {
+        position: absolute;
+        top: 0;
+        left: 0;
+        // On small devices, defining width is necessary because
+        // the child MediaPlaceholder has a relative width
+        width: 100%;
+        @include media-breakpoint-up(sm) {
+            width: auto;
+        }
+    }
+
+    // Give portrait photos a little space on the side on mobile devices
+    // to break up the flow a little
+    &:not(.c-is-landscape) {
+        &, .c-media-placeholder-wrapper {
+            padding: 0 $side-padding 0 $side-padding;
+            @include media-breakpoint-up(sm) {
+                padding: 0;
+            }
+        }
+    }
+
+    .c-media-placeholderContent {
+        position: absolute;
+        width: 100%;
+        height: 100%;
+        top: 0;
+        left: 0;
+        font-size: 4rem;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        opacity: .1;
+    }
+
+    @include media-breakpoint-up(md) {
+        .c-media-thumbnail img {
+            transition: opacity 2s, transform $media-animation-duration $ease-out-back !important;
+            transform: scale(1);
+        }
+        &:hover .c-media-thumbnail img {
+            transform: scale(1.03)
+        }
+    }
+
+    .c-media-thumbnail img {
+        @include img-fluid();
+        width: 100%;
+        opacity: 0;
+        transition: opacity 2s;
+    }
+
+    .c-media-thumbnail.c-is-loaded img {
+        opacity: 1;
+        //animation: fade-in 2s;
+        //animation: fade-in $picture-animation-duration;
+    }
+
+    .title {line-height: 2rem}
+
+    &.c-is-landscape .title {padding-right: $side-padding}
+
+    // Accessories =================================================================================
+    // Accessories (frame, reflection, etc.) not in media query blocks because
+    // they're not rendered under a certain size per JavaScript. Only rendered on larger screens.
+
+    @include media-breakpoint-up(md) {
+        .c-frame {
+            position: absolute;
+            top: 0; bottom: 0; left: 0; right: 0;
+            z-index: -1;
+            transition: transform $media-animation-duration $ease-out-back,
+            opacity $media-animation-duration;
+            transform: scale(0.95);
+            opacity: 0;
+        }
+        &:hover {
+            .c-frame {
+                transform: scale($frame-hover-scale);
+                opacity: 1;
+            }
+        }
+
+        .c-frame-reflection-container {
+            position: absolute;
+            top: 0; bottom: 0; left: 0; right: 0;
+            z-index: 1;
+            overflow: hidden;
+            transform: scale(1);
+            //border: 1px solid pink;
+
+            .c-frame-reflection {
+                position: absolute;
+                opacity: 0;
+                transition: transform $media-animation-duration $ease-out-back,
+                opacity $media-animation-duration;
+                //border: 1px solid black;
+
+                width: 50%;
+                height: 100%;
+                background: linear-gradient(210deg, white -50%, rgba(255, 255, 255, 0) 60%);
+                transform: rotate3d(0, 0, 1, -30deg) translate3d(150%, -5%, 0) scale3d(1.6, 1.3, 1);
+                transform-origin: top center;
+            }
+        }
+
+        .c-frame-reflection-container {
+            // Reflection appears to the eye slightly larger than frame, likely due to shadows,
+            // hence reducing scale slightly.
+            transform: scale($frame-hover-scale - 0.02);
+        }
+
+        &:hover {
+            .c-frame-reflection-container .c-frame-reflection {
+                opacity: 1;
+                transform: rotate3d(0, 0, 1, -20deg) translate3d(120%, -5%, 0) scale3d(1.6, 1.3, 1);
+            }
+        }
+
+        &.c-is-landscape {
+            .c-frame-reflection {
+                transform: rotate3d(0, 0, 1, -50deg) translate3d(150%, 0%, 0) scale3d(1.5, 2, 1);
+                background: linear-gradient(210deg, white -50%, rgba(255, 255, 255, 0) 70%);
+            }
+        }
+
+        &.c-is-landscape:hover {
+            .c-frame-reflection {
+                transform: rotate3d(0, 0, 1, -30deg) translate3d(120%, 0%, 0) scale3d(1.5, 2, 1);
+            }
+        }
+    }
+}

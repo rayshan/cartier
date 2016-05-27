@@ -1,0 +1,31 @@
+.c-grid {
+    @include media-breakpoint-up(lg) {
+        width: 90%;
+    }
+
+    width: 100%;
+    // Expand vertically to fill viewport height minus header and footer when there's little content
+    flex: 1;
+    display: flex;
+    align-items: flex-end;
+    justify-content: center;
+    flex-flow: row wrap;
+
+    // when hovering a c-grid-item, rest of grid items are dimmed via setting
+    // .c-dim on .c-grid, which avoids setting .c-dim on all non :hover grid items
+    &.c-dim .c-grid-item:not(.c-is-active) {
+        opacity: 1 / $golden-ratio;
+    }
+
+    // Optimize animation when grid is active
+    &.c-is-active .c-grid-item {
+
+        .c-media-thumbnail img {will-change: opacity}
+
+        @include media-breakpoint-up(md) {
+            .c-media-thumbnail img {will-change: opacity, transform}
+            .c-frame {will-change: transform, opacity}
+            .c-frame-reflection-container {will-change: transform}
+        }
+    }
+}

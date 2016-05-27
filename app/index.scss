@@ -1,0 +1,99 @@
+@import "shared";
+@import "components/Footer";
+@import "components/Grid/Grid";
+@import "components/Grid/GridItem";
+@import "components/MediaInspector/MediaInspector";
+@import "components/MediaInspector/MediaAndAccessoryContainer";
+@import "components/MediaInspector/Info";
+
+// =================================================================================================
+
+header {
+    $long-width: 100% / $golden-ratio;
+    $short-width: 100% - $long-width;
+
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    text-transform: uppercase;
+    margin: 2rem 0 2rem 0;
+
+    @include media-breakpoint-up(sm) {
+        height: 100px * $golden-ratio;
+        margin: auto;
+    }
+
+    h1 {
+        font-weight: normal;
+        margin: 0;
+        font-size: 1.2rem;
+        line-height: 3rem;
+    }
+
+    hr {
+        width: $long-width;
+        border: 1px solid $gray2;
+
+        @include media-breakpoint-up(lg) {
+            width: $short-width;
+        }
+    }
+
+    nav {
+        width: 100%;
+        display: flex;
+        flex-direction: column;
+
+        @include media-breakpoint-up(sm) {
+            width: $long-width;
+            flex-direction: row;
+            justify-content: space-between;
+        }
+
+        @include media-breakpoint-up(lg) {
+            width: $short-width;
+        }
+
+        .nav-item {
+            text-align: center;
+            line-height: 3rem;
+            margin: 0 ($short-width / 2) 0 ($short-width / 2);
+
+            a {display: block}
+
+            @include media-breakpoint-up(sm) {
+                flex: 1;
+                margin: auto;
+            }
+        }
+    }
+}
+
+.c-app-container {
+    width: 100%;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+
+    // Qualify to not include footer in MediaInspector
+    & > footer {
+        // Need to subtract $grid-gutter because we cannot clear margin-bottom for the last
+        // grid item as we do not know how many will be in the last row of grid
+        height: 100px * $golden-ratio - $grid-gutter;
+    }
+}
+
+// =================================================================================================
+// Animation Definition
+// =================================================================================================
+
+.c-detail-fade-leave {
+    transition: opacity 250ms;
+    opacity: 1;
+}
+.c-detail-fade-leave.c-detail-fade-leave-active {
+    opacity: 0;
+}

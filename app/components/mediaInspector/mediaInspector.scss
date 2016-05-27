@@ -1,0 +1,87 @@
+.media-inspector {
+    position: fixed;
+    left: 0;
+    width: 100%;
+    height: 100%;
+
+    display: flex;
+    justify-content: center;
+    z-index: 2; // Put it above the grid
+
+    .c-detail-background {
+        will-change: opacity;
+        position: absolute;
+        top: 37.5%;
+        left: 37.5%;
+        width: 25%;
+        height: 25%;
+        // Generating a smaller blurred image is faster, then we enlarge it to cover the viewport
+        transform: scale(4);
+    }
+
+    .nav {
+        position: absolute;
+        left: 0;
+        right: 0;
+        z-index: 1; // Put it above background overlay and image
+        display: flex;
+
+        .nav-item {
+            flex: 1;
+            height: 3rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+
+            &.full-screen-button {
+                cursor: zoom-in;
+            }
+        }
+    }
+
+    //.c-detail-content-wrapper {
+    //    //display: flex;
+    //    // flex-direction allows child to not have 100% height, which is necessary because
+    //    // we want c-previous and c-next to be 100% of the height of c-media,
+    //    // without knowing how tall c-media is beforehand.
+    //    //flex-direction: column;
+    //    //align-items: center;
+    //    //justify-content: center;
+    //    //flex: 1;
+    //}
+
+    footer {
+        position: fixed;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        @include hit-detection-with-children-only;
+
+        // Custom media query instead of using bootstrap's mixins due to need to detect for orientation
+        @media (max-width: map-get($grid-breakpoints, md)) and (orientation: landscape) {
+            right: auto;
+            width: auto;
+        }
+    }
+}
+
+// =================================================================================================
+// Animation Definition
+// =================================================================================================
+
+.c-detail-background-fade-enter,
+.c-detail-background-fade-appear {
+    transition: opacity 1000ms;
+    opacity: 0;
+}
+.c-detail-background-fade-enter.c-detail-background-fade-enter-active,
+.c-detail-background-fade-appear.c-detail-background-fade-appear-active {
+    opacity: 1;
+}
+.c-detail-background-fade-leave {
+    transition: opacity 1000ms;
+    opacity: 1;
+}
+.c-detail-background-fade-leave.c-detail-background-fade-leave-active {
+    opacity: 0;
+}

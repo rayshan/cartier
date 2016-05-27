@@ -1,0 +1,174 @@
+#media-inspector-info {
+    @include c-filler;
+    overflow-y: auto;
+
+    //z-index: 2; // Put it above .c-detail
+
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+
+    @include hit-detection-with-children-only;
+
+    .title {
+        font-size: 1.5rem;
+        font-weight: 300; // thinner due to larger
+        margin-bottom: 1rem;
+        text-align: center;
+        max-width: 80%;
+
+        @include media-breakpoint-up(sm) {
+            font-size: 2rem;
+        }
+    }
+
+    .c-map {
+        img {
+            @include img-fluid();
+            max-height: 85vh;
+            margin: auto;
+
+            // Take up width of entire viewport unless not a phone
+            @include media-breakpoint-up(sm) {
+                max-width: 80%;
+            }
+        }
+
+        figcaption {
+            text-align: center;
+            height: 3rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+
+            a {
+                height: 100%;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                padding: 0 $link-padding 0 $link-padding;
+            }
+        }
+    }
+
+    .c-metadata {
+        text-align: center;
+    }
+
+    // Custom media query instead of using bootstrap's mixins due to need to detect for orientation
+    @media (max-width: map-get($grid-breakpoints, md)) and (orientation: landscape) {
+        flex-direction: row;
+        flex-wrap: wrap;
+        padding-top: 3rem;
+        padding-bottom: 3rem;
+
+        .title {
+            width: 100%;
+        }
+
+        .c-map,
+        .c-metadata {
+            width: 50%;
+            height: calc(100% - 3rem);
+            margin-bottom: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .c-map img {
+            max-width: 100%;
+        }
+
+        .c-metadata {
+            pointer-events: none;
+
+            & * + * {
+                margin-top: .5rem;
+            }
+        }
+
+
+    }
+}
+
+// =================================================================================================
+// Animation Definition
+// =================================================================================================
+
+// Initial build-in from CDetailMain
+// Total duration = 250 / $animation-delay-factor + 500 / $animation-delay-factor + 250 = 625
+.detail-info-appear {
+    .title {
+        @include expand-in-start($c-detail-info-item-build-duration, null);
+    }
+    .c-map {
+        @include expand-in-start(
+            $c-detail-info-item-build-duration,
+            $c-detail-info-item-build-duration / $animation-delay-factor
+        );
+    }
+    .c-metadata {
+        @include expand-in-start(
+            $c-detail-info-item-build-duration,
+            $c-detail-info-item-build-duration / $animation-delay-factor * 2
+        );
+    }
+}
+.detail-info-appear.detail-info-appear-active {
+    .title {
+        @include shrink-expand-in-end();
+    }
+    .c-map {
+        @include shrink-expand-in-end();
+    }
+    .c-metadata {
+        @include shrink-expand-in-end();
+    }
+}
+
+// Subsequent build-in from CDetailMain
+// Total duration = 375 / 1.5 + 250 / $animation-delay-factor + 500 / $animation-delay-factor + 250 = 875
+.detail-info-enter {
+    // Don't wait for CDetailMain to fully build out to start CDetailInfo build in,
+    // which provides a sense of continuity and speediness.
+    $initial-delay: $cDetailMainBuildOut / $animation-delay-factor;
+    .title {
+        @include expand-in-start($c-detail-info-item-build-duration, $initial-delay);
+    }
+    .c-map {
+        @include expand-in-start(
+            $c-detail-info-item-build-duration,
+            $initial-delay + $c-detail-info-item-build-duration / $animation-delay-factor
+        );
+    }
+    .c-metadata {
+        @include expand-in-start(
+            $c-detail-info-item-build-duration,
+            $initial-delay + $c-detail-info-item-build-duration / $animation-delay-factor * 2
+        );
+    }
+}
+.detail-info-enter.detail-info-enter-active {
+    .title {
+        @include shrink-expand-in-end();
+    }
+    .c-map {
+        @include shrink-expand-in-end();
+    }
+    .c-metadata {
+        @include shrink-expand-in-end();
+    }
+}
+
+// Total duration = 250 / $animation-delay-factor + 250 = 375
+.detail-info-leave {
+    // Build-out of CDetailMain when going to CDetailInfo
+    @include c-detail-main-build-out();
+}
+.detail-info-leave.detail-info-leave-active {
+    // Build-out of CDetailMain when going to CDetailInfo
+    @include c-detail-main-build-out-active();
+}

@@ -1,0 +1,21 @@
+footer {
+    width: 100%;
+    font-size: 0.8rem;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+
+    a {
+        padding: 0 $link-padding 0 $link-padding;
+        line-height: 3rem;
+    }
+}
+
+.c-logo {
+    width: 3.5rem;
+    //vertical-align: bottom; // seems to be baseline by default, puts logo above preceding text
+    margin-left: 0.5ch; // 1/2 of width of the glyph '0'
+    // Autoprefixer only applies for prod; we need to see this in Chrome for dev
+    -webkit-filter: drop-shadow($drop-shadow);
+    filter: drop-shadow($drop-shadow);
+}
