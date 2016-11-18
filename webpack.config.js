@@ -2,6 +2,7 @@
 
 const path = require("path"),
     webpack = require("webpack"),
+    autoprefixer = require("autoprefixer"),
     HtmlWebpackPlugin = require("html-webpack-plugin"),
     ExtractTextPlugin = require("extract-text-webpack-plugin"),
     TITLE = require("./app/data/constants.js").TITLE,
@@ -15,22 +16,14 @@ const path = require("path"),
 const isDebug = process.env.NODE_ENV === "development",
     cssLoaderConfig = JSON.stringify({
         sourceMap: true,
-        // Doesn't seem to autoprefix, using autoprefixer-loader instead
-        // css-loader uses cssnano, which uses postcss ecosystem, including autoprefixer
-        //autoprefixer: {
-        //    browsers: "last 2 versions",
-        //    cascade: false
-        //},
+        // css-loader uses cssnano, which only uses autoprefixer to remove unnecessary prefixes;
+        // we don't need this since we're passing it to autoprefixer for prefixing
         autoprefixer: false,
         discardComments: {removeAll: true},
         minimize: !isDebug
     }),
-    autoprefixerConfig = JSON.stringify({
-        browsers: "last 2 versions",
-        cascade: false
-    }),
     sassLoaderSubLoaders = `css?${cssLoaderConfig}!` +
-        (isDebug ? "" : `autoprefixer?${autoprefixerConfig}!`) +
+        (isDebug ? "" : `postcss!`) +
         `sass`,
     // Reloading extracted css with hot module replacement per
     // https://github.com/webpack/extract-text-webpack-plugin/issues/30#issuecomment-125757853
@@ -90,29 +83,15 @@ const babelPlugins = () => {
     if (isDebug) {
         // Don't compile down fully to ES5 as we only debug on latest Chrome / Safari / Firefox
         plugins.push(
-            //"check-es2015-constants",
-            "transform-es2015-arrow-functions",
-            //"transform-es2015-block-scoped-functions",
+            // Safari TP 13 complains about mediaQueries not found,
+            // but it should support const block scoping, not sure why this is needed
             "transform-es2015-block-scoping",
-            "transform-es2015-classes",
-            //"transform-es2015-computed-properties",
-            "transform-es2015-destructuring",
-            //"transform-es2015-for-of",
-            //"transform-es2015-function-name",
-            //"transform-es2015-literals",
-            "transform-es2015-modules-commonjs",
-            //"transform-es2015-object-super",
-            "transform-es2015-parameters"
-            //"transform-es2015-shorthand-properties",
-            //"transform-es2015-spread",
-            //"transform-es2015-sticky-regex",
-            //"transform-es2015-template-literals",
-            //"transform-es2015-typeof-symbol",
-            //"transform-es2015-unicode-regex",
-            //"transform-regenerator"
+            // No browser supports this for now; webpack2 may remove the need for it
+            "transform-es2015-modules-commonjs"
         );
     } else {
         plugins.push(
+            // Uses entire es2015 preset plus below
             // Reduces helper code repeating
             // https://babeljs.algolia.com/docs/usage/runtime/
             "transform-runtime",
@@ -170,17 +149,18 @@ const config = {
                 test: /screenfull/
             },
             {
-                loader: "file",
-                test: /\.jpe?g$|\.gif$|\.png$|\.svg$/,
-                query: {
-                    name: isDebug ? "[path][name].[ext]" : "[name].[ext]"
-                }
-            },
-            {
                 loader: sassLoader,
                 test: /\.scss$/
             }
         ]
+    },
+    postcss: function () {
+        return [
+            autoprefixer({
+                browsers: "last 2 versions",
+                cascade: false
+            }),
+        ];
     },
     sassLoader: {
         sourceMap: true,
