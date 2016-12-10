@@ -118,6 +118,9 @@ const config = {
         ],
         app: path.resolve(__dirname, "app/index.jsx")
     },
+    resolve: {
+        modulesDirectories: ["node_modules", "app"]
+    },
     cache: true,
     debug: isDebug,
     // emit full source maps for debugging prod build,
@@ -159,7 +162,7 @@ const config = {
         return [
             autoprefixer({
                 browsers: "last 2 versions",
-                cascade: false
+                cascade: false,
             }),
         ];
     },
@@ -167,7 +170,7 @@ const config = {
         sourceMap: true,
         includePaths: [
             "node_modules",
-            "app/data"
+            "app",
         ],
         importer: jsonImporter
     },
