@@ -152,10 +152,19 @@ const config = {
                 loader: "imports?screenfull=screenfull",
                 test: /screenfull/
             },
+            // This loader is helpful as webpack automatically bundles the assets with the
+            // production build, with corrected paths
+            {
+                loader: "file",
+                test: /\.jpe?g$|\.gif$|\.png$|\.svg$/,
+                query: {
+                    name: isDebug ? "[path][name].[ext]" : "[name].[ext]"
+                }
+            },
             {
                 loader: sassLoader,
                 test: /\.scss$/
-            }
+            },
         ]
     },
     postcss: function () {

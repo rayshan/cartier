@@ -15,7 +15,7 @@ import debounce from "lodash.debounce";
 import Combokeys from "combokeys";
 import screenfull from "screenfull";
 import Nav from "./Nav.jsx";
-import Footer from "../Footer.jsx";
+import Footer from "../Footer/Footer.jsx";
 
 import "./MediaInspector.scss";
 

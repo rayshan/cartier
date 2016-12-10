@@ -1,6 +1,10 @@
 import React from "react";
-import {MASTHEAD} from "../data/constants.js";
-import Copyright from "./Copyright.jsx";
+
+import {MASTHEAD} from "data/constants.js";
+import Copyright from "components/Copyright.jsx";
+import darkLogoPath from "media/cartier-logo.min.svg";
+import lightLogoPath from "media/cartier-logo-white.min.svg";
+
 import "./Footer.scss";
 
 // =================================================================================================
@@ -15,7 +19,7 @@ class Footer extends React.Component {
         }
     }
     get logoPath() {
-        return `cartier-logo${this.props.foregroundColor ? "-white" : ""}.min.svg`;
+        return this.props.foregroundColor ? lightLogoPath : darkLogoPath;
     }
     get linkClassName() {
         return (this.props.isLessProminent ? "will-stand-out-on-hover" : "will-fade-on-hover") +
