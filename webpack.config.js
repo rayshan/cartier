@@ -34,6 +34,12 @@ const isDebug = process.env.NODE_ENV === "development",
 
 const webpackPlugins = () => {
     const plugins = [
+        new webpack.DefinePlugin({
+            "process.env": {
+                // Setting a pure string doesn't work
+                NODE_ENV: JSON.stringify(process.env.NODE_ENV || 'development')
+            }
+        }),
         new webpack.optimize.OccurenceOrderPlugin(true),
         new HtmlWebpackPlugin({
             template: "app/index.html",
@@ -48,11 +54,6 @@ const webpackPlugins = () => {
 
     if (!isDebug) {
         plugins.push(
-            new webpack.DefinePlugin({
-                "process.env": {
-                    NODE_ENV: JSON.stringify("production") // pure string doesn't work
-                }
-            }),
             new webpack.optimize.OccurrenceOrderPlugin(true),
             new webpack.optimize.DedupePlugin(),
             new webpack.optimize.UglifyJsPlugin({
