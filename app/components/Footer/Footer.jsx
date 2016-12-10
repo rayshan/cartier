@@ -1,6 +1,6 @@
 import React from "react";
 
-import {MASTHEAD} from "data/constants.js";
+import {CARTIER_DESCRIPTION} from "data/constants.js";
 import Copyright from "components/Copyright.jsx";
 import darkLogoPath from "media/cartier-logo.min.svg";
 import lightLogoPath from "media/cartier-logo-white.min.svg";
@@ -31,7 +31,7 @@ class Footer extends React.Component {
                 {this.props.shouldPresentCopyright ? <Copyright /> : null}
 
                 <a href="https://github.com/rayshan/cartier"
-                   title={MASTHEAD}
+                   title={CARTIER_DESCRIPTION}
                    target="_blank"
                    className={this.linkClassName}
                 >

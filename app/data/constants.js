@@ -21,8 +21,11 @@ const GOLDEN_RATIO = 1.62,
 
 module.exports = {
     // Property Info
-    MASTHEAD: "Cartier - Exhibit your best photographs.",
     TITLE: "Photography of Ray Shan.",
+    MASTHEAD: {
+        TITLE: "Ray Shan",
+        LINK: "https://shan.io",
+    },
     AUTHOR: "Ray Shan",
     COPYRIGHT: "All rights reserved.",
     BASE_HREF: "/photography/",
@@ -57,5 +60,6 @@ module.exports = {
         "January", "February", "March", "April", "May", "June",
         "July", "August", "September", "October", "November", "December"
     ],
-    KT_TO_KPH: 1.852
+    KT_TO_KPH: 1.852,
+    CARTIER_DESCRIPTION: "Cartier - Exhibit your best photographs.",
 };
