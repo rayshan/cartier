@@ -1,11 +1,13 @@
 import React from "react";
 
 import debounce from "lodash.debounce";
-import {mediaQueries} from "../../actions.js"
+import {mediaQueries} from "actions.js"
 import GridItem from "./GridItem.jsx"
-import {COLUMN_WIDTH_NARROW, COLUMN_WIDTH_WIDE} from "../../data/constants.js";
+import {COLUMN_WIDTH_NARROW, COLUMN_WIDTH_WIDE} from "data/constants.js";
 import Combokeys from "combokeys";
 import pause from "combokeys/plugins/pause";
+
+import "./Grid.scss";
 
 // =================================================================================================
 

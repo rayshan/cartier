@@ -1,9 +1,11 @@
 import React from "react";
 
 import Link from "react-router/lib/Link";
-import {GUTTER} from "../../data/constants.js";
+import {GUTTER} from "data/constants.js";
 import {MediaThumbnail} from "../Media/Media.jsx";
 import {MediaFrame, MediaReflection} from "../Media/Frame.jsx"
+
+import "./GridItem.scss";
 
 // =================================================================================================
 

@@ -1,0 +1,39 @@
+@import "node_modules/bootstrap/scss/variables";
+@import "data/sassConstants.json";
+
+// =================================================================================================
+
+// Colors
+$gray1: #FAFAFA; /* 50 */
+$gray2: #EEEEEE; /* 200 */
+$gray3: #E0E0E0; /* 300 */
+$gray4: #9E9E9E; /* 500 */
+$button-active-background: hsla(1, 0%, 50%, .15);
+$will-stand-out-on-hover-opacity: .6;
+
+$golden-ratio: 1.62;
+$ease-out-back: cubic-bezier(0.175, 0.885, 0.32, 1.275);
+
+// Inspired by Stripe homepage
+$ease: cubic-bezier(0.225, 0.5 ,0.165 ,1);
+$media-animation-duration: 350ms;
+$link-animation-duration: 200ms;
+$drop-shadow: 0 1px 2px rgba(0, 0, 0, 0.5);
+// Use below to debug drop shadow
+//$drop-shadow: 0 10px 2px pink;
+$frame-hover-scale: 1.15;
+// For stand-alone links, such as link to Cartier, so :active background extends beyond link content
+$link-padding: 2rem;
+
+// Animation
+//$c-detail-main-picture-build-duration: 500ms;
+//$c-detail-main-accessory-build-duration: 250ms;
+
+//$cDetailMainBuildOut:
+//    $c-detail-main-picture-build-duration / 2 + $c-detail-main-accessory-build-duration; // 500
+
+//$c-detail-info-element-build-in-duration: 250ms;
+//$c-detail-info-map-build-in-duration: 500ms;
+
+//$c-detail-info-item-build-duration: 250ms;
+//$cDetailInfoBuildOut: $c-detail-info-item-build-duration * (1 + 0.5 + 0.5); // 500

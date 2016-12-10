@@ -1,10 +1,5 @@
-@import "shared";
-@import "components/Footer";
-@import "components/Grid/Grid";
-@import "components/Grid/GridItem";
-@import "components/MediaInspector/MediaInspector";
-@import "components/MediaInspector/MediaAndAccessoryContainer";
-@import "components/MediaInspector/Info";
+@import "styles/variables";
+@import "styles/mixins";
 
 // =================================================================================================
 
@@ -17,7 +12,6 @@ header {
     align-items: center;
     justify-content: center;
     flex-direction: column;
-    text-transform: uppercase;
     margin: 2rem 0 2rem 0;
 
     @include media-breakpoint-up(sm) {
@@ -69,31 +63,4 @@ header {
             }
         }
     }
-}
-
-.c-app-container {
-    width: 100%;
-    min-height: 100vh;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-
-    // Qualify to not include footer in MediaInspector
-    & > footer {
-        // Need to subtract $grid-gutter because we cannot clear margin-bottom for the last
-        // grid item as we do not know how many will be in the last row of grid
-        height: 100px * $golden-ratio - $grid-gutter;
-    }
-}
-
-// =================================================================================================
-// Animation Definition
-// =================================================================================================
-
-.c-detail-fade-leave {
-    transition: opacity 250ms;
-    opacity: 1;
-}
-.c-detail-fade-leave.c-detail-fade-leave-active {
-    opacity: 0;
 }

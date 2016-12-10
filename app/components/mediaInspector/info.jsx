@@ -1,9 +1,11 @@
 import React from "react";
 
 import Copyright from "../Copyright.jsx";
-import {Media} from "./../Media/Media.jsx"
-import Static from "./../Static.jsx";
-import {KT_TO_KPH} from "../../data/constants.js";
+import {Media} from "../Media/Media.jsx"
+import Static from "../StaticComponent.jsx";
+import {KT_TO_KPH} from "data/constants.js";
+
+import "./Info.scss";
 
 // =================================================================================================
 

@@ -1,6 +1,6 @@
 import React from "react";
 
-import Static from "./../Static.jsx";
+import Static from "../StaticComponent.jsx";
 import hexRgb from "hex-rgb";
 
 // =================================================================================================

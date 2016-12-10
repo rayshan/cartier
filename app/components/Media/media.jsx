@@ -1,7 +1,7 @@
 import React from "react";
 import ReactCSSTransitionGroup from "react-addons-css-transition-group";
 
-import {MAX_DIMENSION_1X, MAX_PORTRAIT_ASPECT_RATIO} from "../../data/constants.js";
+import {MAX_DIMENSION_1X, MAX_PORTRAIT_ASPECT_RATIO} from "data/constants.js";
 
 // =================================================================================================
 

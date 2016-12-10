@@ -27,7 +27,6 @@ module.exports = {
     COPYRIGHT: "All rights reserved.",
     BASE_HREF: "/photography/",
     LINK_DATA: [
-        {label: "Home", uri: "https://shan.io"},
         {label: "Instagram", uri: "https://instagram.com/rayshan"},
         {label: "Twitter", uri: "https://twitter.com/rayshan"},
         {label: "Facebook", uri: "https://facebook.com/rayshan"}

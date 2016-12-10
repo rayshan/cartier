@@ -1,0 +1,158 @@
+@import "styles/variables";
+@import "styles/mixins";
+
+//==================================================================================================
+// extends
+// copied b/c sass doesn't have @import reference like less
+// https://github.com/sass/sass/issues/1094
+//==================================================================================================
+
+.c-label {
+    @include c-monospace;
+
+    display: inline-block;
+    padding: .25em .4em;
+    margin: 0 5px 0 5px;
+    font-size: 0.9rem;
+    line-height: 1;
+    color: white;
+    text-align: center;
+    white-space: nowrap;
+    vertical-align: baseline;
+    @include border-radius();
+}
+
+//==================================================================================================
+// General
+//==================================================================================================
+
+:root {
+    // Referenced by rem units
+    font-size: 12px;
+}
+
+body {
+    // Not starting with "system" in case Windows defaults to Arial or System, see:
+    // https://medium.com/@mwichary/system-shock-6b1dc6d6596f
+    // Non-body uses SF UI Display, not Text, due to larger size, per Apple's guidelines
+    // http://furbo.org/2015/07/09/i-left-my-system-fonts-in-san-francisco/
+    // Full list from https://www.smashingmagazine.com/2015/11/using-system-ui-fonts-practical-guide/
+    font-family: -apple-system,
+        BlinkMacSystemFont,
+        "Helvetica Neue",
+        "Segoe UI",
+        "Roboto",
+        "Oxygen",
+        "Ubuntu",
+        "Cantarell",
+        "Fira Sans",
+        "Droid Sans",
+        sans-serif;
+    font-size: 1rem;
+    font-weight: 400;
+    letter-spacing: 0.02rem; // extra tracking due to small size
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    text-rendering: optimizeLegibility;
+    font-feature-settings: 'liga';
+    margin: 0;
+}
+
+a {
+    color: inherit;
+    text-decoration: none;
+
+    &:hover,
+    &:focus {
+        text-decoration: none;
+        color: inherit;
+    }
+}
+
+.title {
+    text-transform: capitalize;
+    text-align: right;
+    font-style: italic;
+    font-size: inherit;
+    font-weight: inherit; // inherit body's
+    margin: 0; // clear h2's default margin-bottom
+}
+
+.c-copyright {
+    text-transform: capitalize;
+}
+
+.nav-item {
+    // Per http://stackoverflow.com/a/4407335/2152076;
+    // Autoprefixer only applies for prod; we need to see this in Chrome for dev
+    // Not setting -webkit-touch-callout: none; because we want user to be able to tap and hold to
+    // perform actions with links on iOS devices
+    -webkit-user-select: none;
+    user-select: none;
+}
+
+.wind-symbol {
+    // this allows span to be rotated with CSS transform
+    display: inline-block;
+    text-shadow: none;
+}
+
+.c-app-container {
+    width: 100%;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+
+    // Qualify to not include footer in MediaInspector
+    & > footer {
+        // Need to subtract $grid-gutter because we cannot clear margin-bottom for the last
+        // grid item as we do not know how many will be in the last row of grid
+        height: 100px * $golden-ratio - $grid-gutter;
+    }
+}
+
+// =================================================================================================
+// Animation Definition
+// =================================================================================================
+
+.c-detail-fade-leave {
+    transition: opacity 250ms;
+    opacity: 1;
+}
+
+.c-detail-fade-leave.c-detail-fade-leave-active {
+    opacity: 0;
+}
+
+.will-fade-on-hover {
+    @include media-breakpoint-up(sm) {
+        transition: opacity $link-animation-duration;
+        will-change: opacity;
+        &:hover {opacity: 0.8}
+    }
+}
+
+.will-stand-out-on-hover {
+    @include media-breakpoint-up(sm) {
+        opacity: $will-stand-out-on-hover-opacity;
+        transition: opacity $link-animation-duration;
+        will-change: opacity;
+        &:hover {opacity: 1}
+    }
+}
+
+.will-dim-on-active {
+    -webkit-tap-highlight-color: $button-active-background;
+    &:active {
+        filter: brightness(80%);
+    }
+}
+
+.will-stand-out-on-active {
+    -webkit-tap-highlight-color: $button-active-background;
+    &:active {
+        opacity: 1;
+        background-color: $button-active-background;
+    }
+}

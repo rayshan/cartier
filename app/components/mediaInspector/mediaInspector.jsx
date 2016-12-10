@@ -9,13 +9,15 @@ import {
     cDetailInfoAppear,
     cDetailMainEnter,
     cDetailInfoEnter
-} from "../../data/constants.js";
+} from "data/constants.js";
 import BlurredMedia from "../Media/BlurredMedia.jsx";
 import debounce from "lodash.debounce";
 import Combokeys from "combokeys";
 import screenfull from "screenfull";
 import Nav from "./Nav.jsx";
 import Footer from "../Footer.jsx";
+
+import "./MediaInspector.scss";
 
 // =================================================================================================
 

@@ -1,10 +1,11 @@
 import React from "react";
 
 import {connect} from "react-redux";
-import {matchMediaQuery, mediaQueries} from "../actions.js"
+import {matchMediaQuery, mediaQueries} from "actions.js";
 import ReactCSSTransitionGroup from "react-addons-css-transition-group";
 import Header from "./Header.jsx";
 import Footer from "./Footer.jsx";
+import "./App.scss";
 
 // =================================================================================================
 

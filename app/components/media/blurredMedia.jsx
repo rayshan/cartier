@@ -1,5 +1,5 @@
 import React from "react";
-import stackBlurImage from "./../StackBlur.js";
+import stackBlurImage from "./stack-blur.js";
 
 class BlurredMedia extends React.Component {
     performStackBlur() {

@@ -1,9 +1,11 @@
 import React from "react";
 
 import Link from "react-router/lib/Link";
-import Static from "../Static.jsx";
-import {Media} from "./../Media/Media.jsx"
-import {loadPicturePolyfill} from "../../actions.js"
+import Static from "components/StaticComponent.jsx";
+import {Media} from "components/Media/Media.jsx"
+import {loadPicturePolyfill} from "actions.js"
+
+import "./MediaAndAccessoryContainer.scss";
 
 // =================================================================================================
 

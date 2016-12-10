@@ -1,3 +1,8 @@
+@import "styles/variables";
+@import "styles/mixins";
+
+// =================================================================================================
+
 .media-and-accessory-container {
     //@include c-full-screen-overlay();
     //height: 100%;
@@ -67,6 +72,7 @@
         .pagination-link-symbol {
             width: 2rem;
             height: 2rem;
+            filter: drop-shadow($drop-shadow);
 
             @include media-breakpoint-up(md) {
                 width: 3rem;

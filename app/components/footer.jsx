@@ -1,7 +1,7 @@
 import React from "react";
-
 import {MASTHEAD} from "../data/constants.js";
 import Copyright from "./Copyright.jsx";
+import "./Footer.scss";
 
 // =================================================================================================
 
@@ -32,7 +32,7 @@ class Footer extends React.Component {
                    className={this.linkClassName}
                 >
                     Exhibition by
-                    <img className="c-logo" src={this.logoPath} alt="Cartier Logo" />
+                    <img className="logo" src={this.logoPath} alt="Cartier Logo" />
                 </a>
             </footer>
         );

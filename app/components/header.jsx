@@ -1,7 +1,14 @@
 import React from "react";
 
-import Static from "./Static.jsx";
-import {LINK_DATA} from "../data/constants.js"
+import Static from "components/StaticComponent.jsx";
+import {LINK_DATA, BASE_HREF} from "data/constants.js"
+import Link from "react-router/lib/Link";
+
+import "./Header.scss";
+
+// =================================================================================================
+
+const isDebug = process.env.NODE_ENV === "development";
 
 // =================================================================================================
 
@@ -20,12 +27,16 @@ class Header extends Static {
     render() {
         return (
             <header>
-                <h1>Ray Shan</h1>
+                <Link to={isDebug ? "/" : BASE_HREF}>
+                    <h1>Ray Shan</h1>
+                </Link>
                 <hr />
                 <nav>{Header.navItems}</nav>
             </header>
         );
     }
 }
+
+// =================================================================================================
 
 export default Header;

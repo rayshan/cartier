@@ -1,12 +1,17 @@
+@import "styles/variables";
+@import "styles/mixins";
+
+// =================================================================================================
+
 .media-inspector {
     position: fixed;
     left: 0;
     width: 100%;
     height: 100%;
-
     display: flex;
     justify-content: center;
     z-index: 2; // Put it above the grid
+    text-shadow: $drop-shadow;
 
     .c-detail-background {
         will-change: opacity;
@@ -61,6 +66,10 @@
         @media (max-width: map-get($grid-breakpoints, md)) and (orientation: landscape) {
             right: auto;
             width: auto;
+        }
+
+        .logo {
+            filter: drop-shadow($drop-shadow);
         }
     }
 }
