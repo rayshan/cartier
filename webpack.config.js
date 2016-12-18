@@ -175,7 +175,7 @@ const config = {
     postcss: function () {
         return [
             autoprefixer({
-                browsers: "last 2 versions",
+                browsers: "last 2 versions, not Explorer < 11, not Opera > 0, not ExplorerMobile > 0",
                 cascade: false,
             }),
         ];
@@ -186,6 +186,8 @@ const config = {
             "node_modules",
             "app",
         ],
+        // TODO: switch to sass-vars-loader so we don't have to
+        // hard code calculations as strings in sassConstants.json
         importer: jsonImporter
     },
     plugins: webpackPlugins(),
