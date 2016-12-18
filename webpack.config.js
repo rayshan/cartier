@@ -1,15 +1,16 @@
 "use strict";
 
 const path = require("path"),
+    fs = require("fs"),
     webpack = require("webpack"),
+    DashboardPlugin = require('webpack-dashboard/plugin'),
     autoprefixer = require("autoprefixer"),
+    jsonImporter = require("node-sass-json-importer"),
     HtmlWebpackPlugin = require("html-webpack-plugin"),
     ExtractTextPlugin = require("extract-text-webpack-plugin"),
     TITLE = require("./app/data/constants.js").TITLE,
     AUTHOR = require("./app/data/constants.js").AUTHOR,
-    BASE_HREF = require("./app/data/constants.js").BASE_HREF,
-    jsonImporter = require("node-sass-json-importer"),
-    fs = require("fs");
+    BASE_HREF = require("./app/data/constants.js").BASE_HREF;
 
 //==========================================================
 
@@ -52,7 +53,11 @@ const webpackPlugins = () => {
         new webpack.optimize.CommonsChunkPlugin("vendors", "vendors-[hash].js")
     ];
 
-    if (!isDebug) {
+    if (isDebug) {
+        plugins.push(
+            new DashboardPlugin()
+        );
+    } else {
         plugins.push(
             new webpack.optimize.OccurrenceOrderPlugin(true),
             new webpack.optimize.DedupePlugin(),
