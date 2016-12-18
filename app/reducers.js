@@ -1,13 +1,11 @@
 // Redux reducers
 
 import * as actions from "./actions.js"
-// import {LOCATION_CHANGE} from "react-router-redux"
 
 // =================================================================================================
 
 const initialState = {
-    mediaQuery: actions.matchMediaQuery().mediaQuery,
-    didLoadPicturePolyfill: false
+    mediaQuery: actions.matchMediaQuery().mediaQuery
 };
 
 export function reducer(state = initialState, action) {
@@ -30,11 +28,6 @@ export function reducer(state = initialState, action) {
         case actions.SET_BACKGROUND_IMAGE_URI:
             return Object.assign({}, state, {
                 backgroundImageUri: action.backgroundImageUri
-            });
-
-        case actions.DID_LOAD_PICTURE_POLYFILL:
-            return Object.assign({}, state, {
-                didLoadPicturePolyfill: action.didLoadPicturePolyfill
             });
 
         default:

@@ -2,7 +2,6 @@
 
 import gridData from "./data/data.json";
 import {TITLE} from "./data/constants.js";
-import loadJS from "fg-loadjs";
 
 // =================================================================================================
 
@@ -138,30 +137,6 @@ export function setKeywords(keywords = []) {
     meta.content = keywords;
     return {
         type: SET_KEYWORDS
-    };
-}
-
-/**
- * This action is invoked once per application.
- *
- * @returns {Function}
- */
-export function loadPicturePolyfill() {
-    return dispatch => {
-        const picturefillUri =
-            "https://cdnjs.cloudflare.com/ajax/libs/picturefill/3.0.1/picturefill.min.js";
-        window.picturefillCFG = window.picturefillCFG || [];
-        window.picturefillCFG.push(["algorithm", "saveData"]);
-        loadJS(picturefillUri, () => {
-            dispatch(setDidLoadPicturePolyfill(true));
-        });
-    }
-}
-
-export function setDidLoadPicturePolyfill(didLoadPicturePolyfill) {
-    return {
-        type: DID_LOAD_PICTURE_POLYFILL,
-        didLoadPicturePolyfill
     };
 }
 

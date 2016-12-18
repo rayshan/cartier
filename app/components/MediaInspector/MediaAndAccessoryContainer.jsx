@@ -3,7 +3,6 @@ import React from "react";
 import Link from "react-router/lib/Link";
 import Static from "components/StaticComponent.jsx";
 import {Media} from "components/Media/Media.jsx"
-import {loadPicturePolyfill} from "actions.js"
 
 import "./MediaAndAccessoryContainer.scss";
 
@@ -64,39 +63,16 @@ class MediaAndAccessoryContainer extends React.Component {
             color: this.props.foregroundColor
         };
     }
-    polyfillPicture() {
-        if (this.props.didLoadPicturePolyfill &&
-            !this.state.didPolyfillPicture) {
-            window.picturefill({
-                elements: [this.media.img]
-            });
-            this.setState({didPolyfillPicture: true});
-        }
-    }
     // =============================================================================================
     // Life Cycle Hooks
     // =============================================================================================
-    constructor() {
-        super();
-        this.state = {didPolyfillPicture: false};
-    }
-    componentDidMount() {
-        const needsPicturePolyfill = !window.HTMLPictureElement;
-        if (needsPicturePolyfill && !this.props.didLoadPicturePolyfill) {
-            this.props.dispatch(loadPicturePolyfill());
-        }
-        this.polyfillPicture();
-    }
     /**
      * This instance should not re-render when there's no slug while going back to grid,
      * or when slug changes - it doesn't need to render a new slug as router
      * will create a new instance to render the new slug
      */
     shouldComponentUpdate(nextProps) {
-        return (nextProps.slug !== this.props.slug) && nextProps.didLoadPicturePolyfill;
-    }
-    componentDidUpdate() {
-        this.polyfillPicture();
+        return nextProps.slug !== this.props.slug;
     }
     render() {
         const {slug, title, foregroundColor} = this.props;

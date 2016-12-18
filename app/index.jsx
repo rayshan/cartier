@@ -48,7 +48,6 @@ function MediaAndAccessoryContainerSelector(state) {
         results.foregroundColor = data.colors[0];
         results.backgroundColor = data.colors[1];
     }
-    results.didLoadPicturePolyfill = state.didLoadPicturePolyfill;
     return results;
 }
 const ConnectedMediaAndAccessoryContainer =
