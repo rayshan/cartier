@@ -43,3 +43,4 @@ build
 _debug
 photos/*
 !photos/README.md
+.happypack

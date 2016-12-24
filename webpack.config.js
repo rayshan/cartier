@@ -4,15 +4,16 @@ const path = require("path"),
     fs = require("fs"),
     webpack = require("webpack"),
     DashboardPlugin = require('webpack-dashboard/plugin'),
-    autoprefixer = require("autoprefixer"),
     jsonImporter = require("node-sass-json-importer"),
     HtmlWebpackPlugin = require("html-webpack-plugin"),
     ExtractTextPlugin = require("extract-text-webpack-plugin"),
+    buildDir = path.resolve(__dirname, "build"),
+    vendorManifest = require(path.resolve(buildDir, "vendor-manifest.json")),
     TITLE = require("./app/data/constants.js").TITLE,
     AUTHOR = require("./app/data/constants.js").AUTHOR,
     BASE_HREF = require("./app/data/constants.js").BASE_HREF;
 
-//==========================================================
+//==================================================================================================
 
 const isDebug = process.env.NODE_ENV === "development",
     cssLoaderConfig = JSON.stringify({
@@ -31,9 +32,22 @@ const isDebug = process.env.NODE_ENV === "development",
     sassLoader = isDebug ?
         `style!${sassLoaderSubLoaders}` :
         ExtractTextPlugin.extract(sassLoaderSubLoaders),
-    cssOutputPath = isDebug ? "bundle.css" : "bundle-[hash].css";
+    cssOutputPath = isDebug ? "bundle.css" : "bundle-[hash].css",
+    uglifyJsConfig = {
+        comments: false,
+        warnings: false,
+        screw_ie8: true,
+        compress: {
+            warnings: false,
+            pure_getters: true,
+            drop_console: true,
+            keep_fargs: false
+        }
+    },
+    // Need to find it as filename contains a hash
+    vendorBundleFilename = `${vendorManifest.name}.js`;
 
-const webpackPlugins = () => {
+const webpackPlugins = function () {
     const plugins = [
         new webpack.DefinePlugin({
             "process.env": {
@@ -41,16 +55,21 @@ const webpackPlugins = () => {
                 NODE_ENV: JSON.stringify(process.env.NODE_ENV || 'development')
             }
         }),
-        new webpack.optimize.OccurenceOrderPlugin(true),
         new HtmlWebpackPlugin({
             template: "app/index.html",
             title: TITLE,
             author: AUTHOR,
             favicon: "app/media/favicon.png",
             baseHref: isDebug ? "/" : BASE_HREF,
-            googleAnalyticsScript: isDebug ? null : fs.readFileSync("app/google-analytics.html")
+            googleAnalyticsScript: isDebug ? null : fs.readFileSync("app/google-analytics.html"),
+            vendorBundleScriptTag: `<script src="${vendorBundleFilename}"></script>>`,
         }),
-        new webpack.optimize.CommonsChunkPlugin("vendors", "vendors-[hash].js")
+        // TODO: investigate long-term caching strategies using
+        // https://github.com/diurnalist/chunk-manifest-webpack-plugin
+        new webpack.DllReferencePlugin({
+            context: __dirname,
+            manifest: vendorManifest
+        }),
     ];
 
     if (isDebug) {
@@ -61,18 +80,7 @@ const webpackPlugins = () => {
         plugins.push(
             new webpack.optimize.OccurrenceOrderPlugin(true),
             new webpack.optimize.DedupePlugin(),
-            new webpack.optimize.UglifyJsPlugin({
-                comments: false,
-                warnings: false,
-                screw_ie8: true,
-                compress: {
-                    warnings: false,
-                    pure_getters: true,
-                    drop_console: true,
-                    keep_fargs: false
-                }
-            }),
-            new webpack.NoErrorsPlugin(),
+            new webpack.optimize.UglifyJsPlugin(uglifyJsConfig),
             new ExtractTextPlugin(cssOutputPath)
         );
     }
@@ -80,7 +88,7 @@ const webpackPlugins = () => {
     return plugins;
 };
 
-const babelPlugins = () => {
+const babelPlugins = function () {
     const plugins = [
         "transform-react-jsx",
         "transform-object-rest-spread"
@@ -109,25 +117,61 @@ const babelPlugins = () => {
     return plugins;
 };
 
+/**
+ * TODO: use HappyPack to parallelize loaders when project grows
+ * @returns {[]}
+ */
+function webpackLoaders() {
+    const loaders = [
+        {
+            loader: "babel",
+            test: /\.jsx?$/,
+            include: path.resolve(__dirname, "app"),
+            query: {
+                // Compile down fully to ES5 for production
+                presets: isDebug ? null : ["es2015"],
+                plugins: babelPlugins(),
+                // Babel has its own cache separate from webpack's
+                cacheDirectory: true,
+            }
+        },
+        {
+            loader: "json",
+            include: path.resolve(__dirname, "app/data"),
+            test: /\.json$/,
+        },
+        // This loader is helpful as webpack automatically bundles the assets with the
+        // production build, with corrected paths
+        {
+            loader: "file",
+            include: path.resolve(__dirname, "app/media"),
+            test: /\.jpe?g$|\.gif$|\.png$|\.svg$/,
+            query: {
+                name: isDebug ? "[path][name].[ext]" : "[name].[ext]"
+            },
+        },
+        {
+            loader: sassLoader,
+            include: path.resolve(__dirname, "app"),
+            test: /\.scss$/,
+        },
+    ];
+    return loaders;
+}
+
 const config = {
-    entry: {
-        vendors: [
-            "react",
-            "react-dom",
-            "react-redux",
-            "react-router",
-            "redux",
-            "redux-thunk",
-            "combokeys",
-            "screenfull"
-        ],
-        app: path.resolve(__dirname, "app/index.jsx")
-    },
+    entry: path.resolve(__dirname, "app/index.jsx"),
     resolve: {
-        modulesDirectories: ["node_modules", "app"]
+        // So we don't have to do import from "app/data/xxx"
+        root: path.resolve(__dirname, "app"),
+        // Only use this for package managers as defining in resolve.root is faster
+        // https://webpack.github.io/docs/build-performance.html#resolve-root-vs-resolve-modulesdirectories
+        //
+        modulesDirectories: ["node_modules"],
     },
     cache: true,
     debug: isDebug,
+    bail: !isDebug,
     // emit full source maps for debugging prod build,
     // won't be loaded by browser unless DevTools are open
     devtool: isDebug ? "cheap-module-eval-source-map" : "source-map",
@@ -138,47 +182,7 @@ const config = {
         // noInfo: !isDebug
     },
     module: {
-        loaders: [
-            {
-                loader: "babel",
-                test: /\.jsx?$/,
-                exclude: /(node_modules|bower_components)/,
-                query: {
-                    // Compile down fully to ES5 for production
-                    presets: isDebug ? null : ["es2015"],
-                    plugins: babelPlugins()
-                }
-            },
-            {
-                loader: "json",
-                test: /\.json$/
-            },
-            {
-                loader: "imports?screenfull=screenfull",
-                test: /screenfull/
-            },
-            // This loader is helpful as webpack automatically bundles the assets with the
-            // production build, with corrected paths
-            {
-                loader: "file",
-                test: /\.jpe?g$|\.gif$|\.png$|\.svg$/,
-                query: {
-                    name: isDebug ? "[path][name].[ext]" : "[name].[ext]"
-                }
-            },
-            {
-                loader: sassLoader,
-                test: /\.scss$/
-            },
-        ]
-    },
-    postcss: function () {
-        return [
-            autoprefixer({
-                browsers: "last 2 versions, not Explorer < 11, not Opera > 0, not ExplorerMobile > 0",
-                cascade: false,
-            }),
-        ];
+        loaders: webpackLoaders()
     },
     sassLoader: {
         sourceMap: true,
@@ -192,7 +196,7 @@ const config = {
     },
     plugins: webpackPlugins(),
     output: {
-        path: path.resolve(__dirname, "build"),
+        path: buildDir,
         // publicPath: "/",
         publicPath: isDebug ? "/" : BASE_HREF,
         filename: isDebug ? "bundle.js" : "bundle-[hash].js"
