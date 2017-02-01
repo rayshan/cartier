@@ -1,4 +1,4 @@
-![Cartier logo](design/cartier-logo.png?raw=true "Cartier logo")
+![Cartier logo](cartier-logo.png?raw=true "Cartier logo")
 ===
 
 > Exhibit your best photographs.
